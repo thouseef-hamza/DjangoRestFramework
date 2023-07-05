@@ -65,14 +65,30 @@ def api_home(request,*args,**kwargs):
     # return HttpResponse(json_str_data,headers={"content_type":"application/json"})
 """
 
+"""
 @api_view(["GET","POST"])
 def api_home(request,*args,**kwargs):
-    """ 
-     DRF API View
-    """
+
+    #DRF API View
+
     instance = Product.objects.all().order_by("?").first()
     data={}
     if instance:
         # data = model_to_dict(instance,fields=['id','title','price','sale_price'])
         data = ProductSerializer(instance).data
     return Response(data)
+"""
+
+@api_view(["POST"])
+def api_home(request,*args,**kwargs):
+    """ 
+    DRF API View
+    """
+    serializer = ProductSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        # instance = serializer.save()
+        # instance = forms.save()
+        print(serializer.data) 
+        return Response(serializer.data)
+    else:
+        return Response({"invalid":"not good data"},status=400)
