@@ -1,7 +1,13 @@
 import json
-from django.http import JsonResponse
+from django.http import JsonResponse,HttpResponse
 from products.models import Product
+from django.forms.models import model_to_dict
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from products.serializers import ProductSerializer
+
 # Create your views here.
+
 """ 
 def api_home(request,*args,**kwargs):
     print(request.GET) # url query params
@@ -18,6 +24,9 @@ def api_home(request,*args,**kwargs):
     return JsonResponse(data)
 """
 
+#  model instance as API Response
+
+""" 
 def api_home(request,*args,**kwargs):
     model_data = Product.objects.all().order_by("?").first()
     data={}
@@ -30,3 +39,40 @@ def api_home(request,*args,**kwargs):
         # turn a Python dict
         # return JSON to my client
     return JsonResponse(data)
+"""
+
+# model instance to dictionary
+"""
+def api_home(request,*args,**kwargs):
+    model_data = Product.objects.all().order_by("?").first()
+    data={}
+    if model_data:
+        data = model_to_dict(model_data,fields=['id','title'])
+    return JsonResponse(data)
+"""
+
+# Model Instance to Dictionary
+"""
+
+def api_home(request,*args,**kwargs):
+    model_data = Product.objects.all().order_by("?").first()
+    data={}
+    if model_data:
+        data = model_to_dict(model_data,fields=['id','title','price'])
+    return JsonResponse(data)
+    #     data=dict(data)
+    #     json_str_data = json.dumps(data)
+    # return HttpResponse(json_str_data,headers={"content_type":"application/json"})
+"""
+
+@api_view(["GET","POST"])
+def api_home(request,*args,**kwargs):
+    """ 
+     DRF API View
+    """
+    instance = Product.objects.all().order_by("?").first()
+    data={}
+    if instance:
+        # data = model_to_dict(instance,fields=['id','title','price','sale_price'])
+        data = ProductSerializer(instance).data
+    return Response(data)
