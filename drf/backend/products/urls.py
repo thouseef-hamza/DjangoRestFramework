@@ -7,3 +7,4 @@ urlpatterns = [
     path('<int:pk>/delete/',views.product_destroy_view), 
     path('<int:pk>/',views.product_detail_view), 
 ]
+ 
