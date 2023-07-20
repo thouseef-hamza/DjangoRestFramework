@@ -43,7 +43,9 @@ DRF is a powerful and flexible toolkit for building WEB API's
 ~ Serialization that supports both ORM and non-ORM data sources.
 ~  
 """
+# ====================================================================================================================================
 # <=============================================== 1 :- Serializer And Serialization in DRF =========================================>
+# ====================================================================================================================================
 
 #  JSON ========================================================>
 """
@@ -143,4 +145,66 @@ This is used to parse data to python native datatype.
 
 JSONParser().parse(stream)
 """
- 
+# =====================================================================================================================================
+# <=================================================== Validation ====================================================================>
+# =====================================================================================================================================
+
+# Types of Validators  ===========>
+"""
+- Field Level Validation
+- Object Level Validation
+- Validators
+"""
+# Field Level Validation ============================================>
+"""
+<> we can specify custom field level validation by adding 
+   validate_fieldName methods to Serializer subclass
+<> These are similiar to the clean_fieldName methods on Django forms.
+<> validate_fieldName methods should return 
+   the validated value or raise a serialzers.ValidationError
+
+Syntax :- def validate_fieldname(self,value)
+
+--->  Where value is the field value that requires validation.
+
+! Automatically invoked when is_valid() method is called.
+"""
+# Object Level Validation ===========================================>
+"""
+<> When we need to do validation that requires access to multiple fields we
+   do object level validation by adding a method called validate() to serializer 
+   Subclass.
+<> It raises a serializers.ValidationError if necessary, or just return the 
+   validated values.
+<> def validate(self,data)
+
+---> Where,data is a dictionary of field values.
+
+"""
+# Validators ==========================================================>
+"""
+<> Validator Functions And Validator Classes Allow you to make your 
+   validation logic into reusable components
+   
+Advantages :- 
+- It introduces a proper seperation of concerns, making your code behavior more
+  obvious
+- It is easy to switch between using shortcut ModelSerializer classes and using 
+  explicit Serializeer classes.Any validation behaviour being used for ModelSerializer
+  is simple to replicate. 
+- Printing the repr() of a serializer instance will show you exactly what 
+  validation rules it applies.
+  There's no extra hidden validation behaviour being called on the model instance.
+"""
+# ==========================================================================================================================================
+# =========================================== Model Serializer Class =======================================================================
+# ==========================================================================================================================================
+"""
+The Model Serializer class provides a shortcut that lets you automatically create a
+Serializer class with fields that correspond to the Model fields
+
+<> It will automatically generate  a set of fields for you,based on the model. 
+<> It will automatically generate validators for the serializer,such as unique_together
+   validators
+<> It includes simple default implementations of create() and update()
+"""
